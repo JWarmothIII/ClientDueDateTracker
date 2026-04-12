@@ -1,7 +1,9 @@
 param(
     [string]$Command,
     [Parameter(ValueFromRemainingArguments = $true)]
-    [string[]]$RemainingItems
+    [string[]]$RemainingItems,
+    [Alias("external")]
+    [switch]$e
 )
 
 Set-StrictMode -Version Latest
@@ -16,6 +18,8 @@ function Show-Help {
     Write-Host "  .\console start-app -AvdName `"Pixel_8_API_36`""
     Write-Host "External emulator:"
     Write-Host "  .\console start-app -External"
+    Write-Host "  .\console start-app -e"
+    Write-Host "  .\console start-app --e"
 }
 
 if ([string]::IsNullOrWhiteSpace($Command)) {
@@ -41,6 +45,9 @@ switch ($Command.ToLowerInvariant()) {
     "start-app" {
         $scriptPath = Join-Path $repoRoot "scripts\start-app.ps1"
         $scriptParams = @{}
+        if ($e) {
+            $scriptParams["External"] = $true
+        }
         for ($i = 0; $i -lt $RemainingItems.Length; $i++) {
             $token = $RemainingItems[$i]
             switch ($token.ToLowerInvariant()) {
@@ -55,6 +62,15 @@ switch ($Command.ToLowerInvariant()) {
                     $scriptParams["SkipBuild"] = $true
                 }
                 "-external" {
+                    $scriptParams["External"] = $true
+                }
+                "-e" {
+                    $scriptParams["External"] = $true
+                }
+                "--external" {
+                    $scriptParams["External"] = $true
+                }
+                "--e" {
                     $scriptParams["External"] = $true
                 }
                 default {

@@ -1,6 +1,7 @@
 param(
     [string]$AvdName,
     [switch]$SkipBuild,
+    [Alias("e")]
     [switch]$External
 )
 

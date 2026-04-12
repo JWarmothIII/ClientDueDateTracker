@@ -25,4 +25,5 @@ echo Example (override):
 echo   console start-app -AvdName "Pixel_8_API_36"
 echo External emulator:
 echo   console start-app -External
+echo   console start-app -e
 exit /b 0
