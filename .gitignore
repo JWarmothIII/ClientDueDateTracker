@@ -1,36 +1,44 @@
 # Gradle
 .gradle/
-build/
-*/build/
+**/build/
 
-# Local configuration
+# Local configuration and secrets
 local.properties
-.idea/caches/
-.idea/libraries/
-.idea/modules.xml
-.idea/workspace.xml
-.idea/navEditor.xml
-.idea/assetWizardSettings.xml
-.idea/deploymentTargetDropDown.xml
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+keystore.properties
+signing.properties
 
 # IntelliJ / Android Studio
 *.iml
 *.ipr
 *.iws
-.idea/
-!.idea/codeStyles
+.idea/*
+!.idea/.gitignore
+!.idea/codeStyles/
 !.idea/codeStyles/**
-!.idea/inspectionProfiles
+!.idea/inspectionProfiles/
 !.idea/inspectionProfiles/**
-!.idea/runConfigurations
+!.idea/runConfigurations/
 !.idea/runConfigurations/**
+!.idea/AndroidProjectSystem.xml
+!.idea/compiler.xml
+!.idea/gradle.xml
+!.idea/misc.xml
+!.idea/vcs.xml
 
 # Android
 captures/
 .externalNativeBuild/
 .cxx/
+*.apk
+*.aab
 
 # Kotlin
+.kotlin/
 *.kotlin_module
 
 # OS files
