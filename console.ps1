@@ -1,3 +1,4 @@
+# console.ps1
 param(
     [string]$Command,
     [Parameter(ValueFromRemainingArguments = $true)]
