@@ -1,4 +1,4 @@
-package dev.jwarmothiii.clientduedatetracker.ui.theme
+package dev.jwarmothiii.clientduedatetracker.shared.theme
 
 import androidx.compose.ui.graphics.Color
 
