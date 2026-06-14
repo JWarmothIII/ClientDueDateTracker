@@ -49,11 +49,16 @@ It focuses on:
 
 ## 🧱 Architecture
 
-DDD-lite layered architecture:
+Domain-oriented Android architecture:
 
 ```text
-presentation -> application -> domain -> infrastructure
+domain/     Business-focused areas and their UI, state, and models
+data/       Persistence and repository implementations
+platform/   Android platform integrations
+shared/     Reusable UI, navigation, utilities, and theme
 ```
+
+See [`docs/architecture.md`](docs/architecture.md) for details.
 
 ---
 
