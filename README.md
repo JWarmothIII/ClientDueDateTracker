@@ -62,22 +62,21 @@ presentation -> application -> domain -> infrastructure
 From the project root:
 
 ```powershell
-.\console start-app
+.\tools\start-app.ps1
 ```
 
 Optional parameters:
 
 ```powershell
 # Pick a specific AVD name
-.\console start-app -AvdName "Pixel_8_API_36"
+.\tools\start-app.ps1 -AvdName "Pixel_8_API_36"
 
 # Skip build (faster if APK is already built)
-.\console start-app -SkipBuild
+.\tools\start-app.ps1 -SkipBuild
 
 # Launch a standalone emulator window when none are running
-.\console start-app -External
-.\console start-app -e
-.\console start-app --e
+.\tools\start-app.ps1 -External
+.\tools\start-app.ps1 -e
 ```
 
 Safety behavior:
@@ -97,10 +96,13 @@ SDK discovery for `adb`/`emulator`:
 
 ---
 
-## 🛠️ Project Console
+## 🛠️ Project Tools
 
-This repo includes a lightweight command dispatcher:
+Run these scripts from the project root:
 
-- `console start-app` (Command Prompt)
-- `.\console start-app` (PowerShell)
-- `.\console.ps1 start-app` (PowerShell explicit)
+```powershell
+.\tools\build.ps1
+.\tools\clean-build.ps1
+.\tools\test.ps1
+.\tools\start-app.ps1
+```
