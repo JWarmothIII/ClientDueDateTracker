@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:function-naming")
+
 package dev.jwarmothiii.clientduedatetracker.domain.dashboard.ui
 
 import androidx.compose.foundation.background
@@ -25,46 +27,70 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.jwarmothiii.clientduedatetracker.data.database.PersistanceTestTableEntity
 import dev.jwarmothiii.clientduedatetracker.shared.theme.ClientDueDateTrackerTheme
 
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier) {
+fun DashboardScreen(
+    modifier: Modifier = Modifier,
+    viewModel: DashboardViewModel = hiltViewModel(),
+) {
+    val persistanceTestTables by viewModel.persistanceTestTables.collectAsState()
+
+    DashboardContent(
+        persistanceTestTables = persistanceTestTables,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun DashboardContent(
+    persistanceTestTables: List<PersistanceTestTableEntity>,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             Surface(color = MaterialTheme.colorScheme.background) {
                 AddClientButton(
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .padding(horizontal = 24.dp, vertical = 12.dp)
+                    modifier =
+                        Modifier
+                            .navigationBarsPadding()
+                            .padding(horizontal = 24.dp, vertical = 12.dp),
                 )
             }
-        }
+        },
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .statusBarsPadding(),
-            contentPadding = PaddingValues(
-                start = 24.dp,
-                top = 20.dp,
-                end = 24.dp,
-                bottom = innerPadding.calculateBottomPadding() + 20.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .statusBarsPadding(),
+            contentPadding =
+                PaddingValues(
+                    start = 24.dp,
+                    top = 20.dp,
+                    end = 24.dp,
+                    bottom = innerPadding.calculateBottomPadding() + 20.dp,
+                ),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             item { Header() }
             item { SummaryRow() }
             item { DueSoonCard() }
             item { PinnedNoteCard() }
+            item { PersistanceTestTableCard(persistanceTestTables = persistanceTestTables) }
         }
     }
 }
@@ -75,12 +101,12 @@ private fun Header() {
         Text(
             text = "Good morning",
             style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Text(
             text = "Here is what needs your attention.",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -89,7 +115,7 @@ private fun Header() {
 private fun SummaryRow() {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         SummaryCard(value = "3", label = "Due soon", modifier = Modifier.weight(1f))
         SummaryCard(value = "12", label = "Active clients", modifier = Modifier.weight(1f))
@@ -100,28 +126,29 @@ private fun SummaryRow() {
 private fun SummaryCard(
     value: String,
     label: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        shape = RoundedCornerShape(20.dp)
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
+        shape = RoundedCornerShape(20.dp),
     ) {
         Column(
             modifier = Modifier.padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         }
     }
@@ -132,49 +159,52 @@ private fun DueSoonCard() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionTitle(title = "Due soon")
         Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            ),
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            shape = RoundedCornerShape(20.dp)
+            shape = RoundedCornerShape(20.dp),
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(18.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(18.dp),
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
+                    modifier =
+                        Modifier
+                            .size(10.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary),
                 )
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(3.dp)
+                    verticalArrangement = Arrangement.spacedBy(3.dp),
                 ) {
                     Text(
                         text = "Treatment plan",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = "JS",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Surface(
                     color = MaterialTheme.colorScheme.primaryContainer,
-                    shape = RoundedCornerShape(50)
+                    shape = RoundedCornerShape(50),
                 ) {
                     Text(
                         text = "DUE TOMORROW",
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -187,26 +217,71 @@ private fun PinnedNoteCard() {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionTitle(title = "Pinned note")
         Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
-            ),
-            shape = RoundedCornerShape(20.dp)
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                ),
+            shape = RoundedCornerShape(20.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(18.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(
                     text = "Discharge for JS due before Friday.",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
                 Text(
                     text = "Updated today",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PersistanceTestTableCard(persistanceTestTables: List<PersistanceTestTableEntity>) {
+    val latestTestTable = persistanceTestTables.firstOrNull()
+    val statusText =
+        if (latestTestTable == null) {
+            "Waiting for persistance test table row."
+        } else {
+            latestTestTable.message
+        }
+    val countText = "Records: ${persistanceTestTables.size}"
+
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        SectionTitle(title = "Persistance test table")
+        Card(
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            shape = RoundedCornerShape(20.dp),
+        ) {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Text(
+                    text = statusText,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = countText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -218,7 +293,7 @@ private fun SectionTitle(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.onBackground
+        color = MaterialTheme.colorScheme.onBackground,
     )
 }
 
@@ -226,19 +301,21 @@ private fun SectionTitle(title: String) {
 private fun AddClientButton(modifier: Modifier = Modifier) {
     Button(
         onClick = {},
-        modifier = modifier
-            .fillMaxWidth()
-            .height(54.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        shape = RoundedCornerShape(16.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(54.dp),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ),
+        shape = RoundedCornerShape(16.dp),
     ) {
         Text(
             text = "Add client",
             style = MaterialTheme.typography.labelLarge,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -247,6 +324,15 @@ private fun AddClientButton(modifier: Modifier = Modifier) {
 @Composable
 private fun DashboardScreenPreview() {
     ClientDueDateTrackerTheme {
-        DashboardScreen()
+        DashboardContent(
+            persistanceTestTables =
+                listOf(
+                    PersistanceTestTableEntity(
+                        label = "startup-test-table",
+                        message = "Room persisted this persistance test table row.",
+                        createdAtEpochMillis = 0,
+                    ),
+                ),
+        )
     }
 }

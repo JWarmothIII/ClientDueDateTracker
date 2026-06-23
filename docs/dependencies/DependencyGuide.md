@@ -47,7 +47,7 @@ In this app, ViewModels can:
 
 The Compose integration provides APIs such as `viewModel()` for obtaining a ViewModel from
 a composable. When Hilt is used, navigation destinations commonly obtain ViewModels with
-`hiltViewModel()` from the Hilt Navigation Compose integration.
+`hiltViewModel()` from the Hilt Lifecycle ViewModel Compose integration.
 
 ## Navigation Compose
 

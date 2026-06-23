@@ -108,6 +108,8 @@ Run these scripts from the project root:
 ```powershell
 .\tools\build.ps1
 .\tools\clean-build.ps1
+.\tools\format.ps1
+.\tools\lint.ps1
 .\tools\test.ps1
 .\tools\start-app.ps1
 ```

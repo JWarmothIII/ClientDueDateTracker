@@ -9,5 +9,9 @@ platform/   Android platform integrations
 shared/     Reusable UI, navigation, utilities, and theme
 ```
 
-Only the `client` domain has its internal package structure initially. Other domains will be
-expanded when their implementation begins.
+Room database definitions, entities, DAOs, and database modules live in `data/database`.
+Repository classes that coordinate persistence access live in `data/repository`, keeping direct
+database access out of composable UI functions.
+
+The first Room schema is `client_due_date_tracker.db` version 1. It contains only the temporary
+`persistance_test_table` table used to prove Room persistence before the real app model is designed.
