@@ -108,6 +108,18 @@ Run these scripts from the project root:
 ```powershell
 .\tools\build.ps1
 .\tools\clean-build.ps1
+.\tools\format.ps1
+.\tools\lint.ps1
 .\tools\test.ps1
 .\tools\start-app.ps1
 ```
+
+Configure the repo's local Git hooks once per checkout:
+
+```powershell
+.\tools\setup-git-hooks.ps1
+```
+
+The commit-message hook appends a pull request link when you commit from the CLI. If the GitHub
+CLI can find an existing PR for the current branch, it appends that PR URL. Otherwise, it appends
+a GitHub compare URL that opens a new PR.
