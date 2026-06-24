@@ -9,5 +9,5 @@ import androidx.room.RoomDatabase
     exportSchema = true,
 )
 abstract class ClientDueDateDatabase : RoomDatabase() {
-    abstract fun persistanceTestTableDao(): PersistanceTestTableDao
+    abstract fun persistenceTestTableDao(): PersistanceTestTableDao
 }

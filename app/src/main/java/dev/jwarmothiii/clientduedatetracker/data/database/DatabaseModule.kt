@@ -27,5 +27,5 @@ object DatabaseModule {
             ).build()
 
     @Provides
-    fun providePersistanceTestTableDao(database: ClientDueDateDatabase): PersistanceTestTableDao = database.persistanceTestTableDao()
+    fun providePersistanceTestTableDao(database: ClientDueDateDatabase): PersistanceTestTableDao = database.persistenceTestTableDao()
 }

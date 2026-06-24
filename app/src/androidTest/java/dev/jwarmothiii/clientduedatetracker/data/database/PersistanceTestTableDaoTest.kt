@@ -27,7 +27,7 @@ class PersistanceTestTableDaoTest {
                     context,
                     ClientDueDateDatabase::class.java,
                 ).build()
-        persistanceTestTableDao = database.persistanceTestTableDao()
+        persistanceTestTableDao = database.persistenceTestTableDao()
     }
 
     @After
