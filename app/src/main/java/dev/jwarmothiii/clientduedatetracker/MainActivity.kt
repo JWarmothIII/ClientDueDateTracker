@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import dagger.hilt.android.AndroidEntryPoint
-import dev.jwarmothiii.clientduedatetracker.domain.dashboard.ui.DashboardScreen
+import dev.jwarmothiii.clientduedatetracker.shared.navigation.ClientDueDateTrackerNavigation
 import dev.jwarmothiii.clientduedatetracker.shared.theme.ClientDueDateTrackerTheme
 
 @AndroidEntryPoint
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ClientDueDateTrackerTheme {
                 Surface {
-                    DashboardScreen()
+                    ClientDueDateTrackerNavigation()
                 }
             }
         }

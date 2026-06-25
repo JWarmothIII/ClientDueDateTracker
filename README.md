@@ -44,6 +44,12 @@ It focuses on:
 - **Material 3 (Compose)**
 - **AndroidX Activity Compose**
 - **AndroidX Lifecycle Runtime KTX**
+- **Navigation Compose**
+- **Room**
+- **WorkManager**
+- **Hilt**
+- **Spotless / ktlint**
+- **Android Lint**
 
 ---
 
@@ -59,6 +65,28 @@ shared/     Reusable UI, navigation, utilities, and theme
 ```
 
 See [`docs/architecture.md`](docs/architecture.md) for details.
+
+---
+
+## 📚 Developer Docs
+
+- [`docs/architecture.md`](docs/architecture.md) - package ownership and high-level structure
+- [`docs/dependencies/DependencyGuide.md`](docs/dependencies/DependencyGuide.md) - core dependency roles
+- [`docs/developer-reference.md`](docs/developer-reference.md) - curated official docs links
+
+---
+
+## 🔁 Git and PR Workflow
+
+- Start from `main`.
+- Create a short-lived branch for one issue or story.
+- Run local validation before opening a PR.
+- Open a PR into `main` and link the issue or epic.
+- Use squash merge after review and passing CI.
+- Delete the branch after merge.
+
+Use the PR template in `.github/pull_request_template.md` for summary, screenshots, test notes,
+and linked issue context.
 
 ---
 
@@ -113,6 +141,22 @@ Run these scripts from the project root:
 .\tools\test.ps1
 .\tools\start-app.ps1
 ```
+
+Command purpose:
+
+- `.\tools\build.ps1` runs the full Gradle build, including lint, formatting checks, and tests.
+- `.\tools\clean-build.ps1` cleans and rebuilds from scratch.
+- `.\tools\format.ps1` applies Kotlin formatting.
+- `.\tools\lint.ps1` runs Android lint static analysis and writes reports under `app/build/reports/`.
+- `.\tools\test.ps1` runs local JVM tests.
+- `.\tools\start-app.ps1` builds and installs the debug app on an emulator or connected device.
+
+Test naming:
+
+- Local JVM tests live under `app/src/test`.
+- Android-dependent tests live under `app/src/androidTest`.
+- Name test classes after the subject under test, such as `RequirementStatusTest` or
+  `PersistenceTestTableDaoTest`.
 
 Configure the repo's local Git hooks once per checkout:
 

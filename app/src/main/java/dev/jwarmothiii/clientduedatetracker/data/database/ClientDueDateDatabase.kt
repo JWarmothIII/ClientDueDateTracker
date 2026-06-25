@@ -4,10 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [PersistanceTestTableEntity::class],
+    entities = [PersistenceTestTableEntity::class],
     version = 1,
     exportSchema = true,
 )
 abstract class ClientDueDateDatabase : RoomDatabase() {
-    abstract fun persistenceTestTableDao(): PersistanceTestTableDao
+    abstract fun persistenceTestTableDao(): PersistenceTestTableDao
 }

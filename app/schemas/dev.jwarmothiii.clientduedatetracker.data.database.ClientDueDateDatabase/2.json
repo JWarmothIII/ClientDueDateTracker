@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "8c59a2609be8469490342ffb22d17394",
+    "version": 2,
+    "identityHash": "5cdb7220966a09cf9c789472a7e458b4",
     "entities": [
       {
         "tableName": "persistence_test_table",
@@ -54,7 +54,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c59a2609be8469490342ffb22d17394')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5cdb7220966a09cf9c789472a7e458b4')"
     ]
   }
 }

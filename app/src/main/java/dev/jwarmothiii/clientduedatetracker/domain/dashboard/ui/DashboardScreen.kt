@@ -36,7 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import dev.jwarmothiii.clientduedatetracker.data.database.PersistanceTestTableEntity
+import dev.jwarmothiii.clientduedatetracker.data.database.PersistenceTestTableEntity
 import dev.jwarmothiii.clientduedatetracker.shared.theme.ClientDueDateTrackerTheme
 
 @Composable
@@ -44,17 +44,17 @@ fun DashboardScreen(
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
-    val persistanceTestTables by viewModel.persistanceTestTables.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     DashboardContent(
-        persistanceTestTables = persistanceTestTables,
+        uiState = uiState,
         modifier = modifier,
     )
 }
 
 @Composable
 private fun DashboardContent(
-    persistanceTestTables: List<PersistanceTestTableEntity>,
+    uiState: DashboardUiState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -90,7 +90,7 @@ private fun DashboardContent(
             item { SummaryRow() }
             item { DueSoonCard() }
             item { PinnedNoteCard() }
-            item { PersistanceTestTableCard(persistanceTestTables = persistanceTestTables) }
+            item { PersistenceTestTableCard(persistenceTestTables = uiState.persistenceTestTables) }
         }
     }
 }
@@ -246,18 +246,18 @@ private fun PinnedNoteCard() {
 }
 
 @Composable
-private fun PersistanceTestTableCard(persistanceTestTables: List<PersistanceTestTableEntity>) {
-    val latestTestTable = persistanceTestTables.firstOrNull()
+private fun PersistenceTestTableCard(persistenceTestTables: List<PersistenceTestTableEntity>) {
+    val latestTestTable = persistenceTestTables.firstOrNull()
     val statusText =
         if (latestTestTable == null) {
-            "Waiting for persistance test table row."
+            "Waiting for persistence test table row."
         } else {
             latestTestTable.message
         }
-    val countText = "Records: ${persistanceTestTables.size}"
+    val countText = "Records: ${persistenceTestTables.size}"
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        SectionTitle(title = "Persistance test table")
+        SectionTitle(title = "Persistence test table")
         Card(
             colors =
                 CardDefaults.cardColors(
@@ -325,13 +325,16 @@ private fun AddClientButton(modifier: Modifier = Modifier) {
 private fun DashboardScreenPreview() {
     ClientDueDateTrackerTheme {
         DashboardContent(
-            persistanceTestTables =
-                listOf(
-                    PersistanceTestTableEntity(
-                        label = "startup-test-table",
-                        message = "Room persisted this persistance test table row.",
-                        createdAtEpochMillis = 0,
-                    ),
+            uiState =
+                DashboardUiState(
+                    persistenceTestTables =
+                        listOf(
+                            PersistenceTestTableEntity(
+                                label = "startup-test-table",
+                                message = "Room persisted this persistence test table row.",
+                                createdAtEpochMillis = 0,
+                            ),
+                        ),
                 ),
         )
     }
