@@ -34,6 +34,8 @@ jobs:
           ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
         run: |
           set -euo pipefail
+          export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT}"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
 
           sudo apt-get update
           sudo apt-get install -y unzip wget
@@ -47,11 +49,20 @@ jobs:
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
           mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
 
-          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            echo "sdkmanager not found at $SDKMANAGER"
+            exit 1
+          fi
 
-          # Accept licenses and install platform
-          yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
-          sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platforms;android-37"
+          # refresh repository metadata
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --update
+
+          # Accept licenses non-interactively (creates $ANDROID_SDK_ROOT/licenses)
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses
+
+          # Install platform-tools, build-tools, and the platform
+          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "build-tools;37.0.0" "platforms;android-37"
 
       - name: Build project
         run: ./gradlew --no-daemon build
@@ -82,6 +93,8 @@ jobs:
           ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
         run: |
           set -euo pipefail
+          export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT}"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
 
           sudo apt-get update
           sudo apt-get install -y unzip wget
@@ -95,11 +108,20 @@ jobs:
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
           mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
 
-          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            echo "sdkmanager not found at $SDKMANAGER"
+            exit 1
+          fi
 
-          # Accept licenses and install platform
-          yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
-          sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platforms;android-37"
+          # refresh repository metadata
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --update
+
+          # Accept licenses non-interactively (creates $ANDROID_SDK_ROOT/licenses)
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses
+
+          # Install platform-tools, build-tools, and the platform
+          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "build-tools;37.0.0" "platforms;android-37"
 
       - name: Check formatting
         run: ./gradlew --no-daemon spotlessCheck
@@ -130,6 +152,8 @@ jobs:
           ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
         run: |
           set -euo pipefail
+          export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT}"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
 
           sudo apt-get update
           sudo apt-get install -y unzip wget
@@ -143,11 +167,20 @@ jobs:
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
           mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
 
-          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            echo "sdkmanager not found at $SDKMANAGER"
+            exit 1
+          fi
 
-          # Accept licenses and install platform
-          yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
-          sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platforms;android-37"
+          # refresh repository metadata
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --update
+
+          # Accept licenses non-interactively (creates $ANDROID_SDK_ROOT/licenses)
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses
+
+          # Install platform-tools, build-tools, and the platform
+          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "build-tools;37.0.0" "platforms;android-37"
 
       - name: Run lint
         run: ./gradlew --no-daemon lint
@@ -178,6 +211,8 @@ jobs:
           ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
         run: |
           set -euo pipefail
+          export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT}"
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
 
           sudo apt-get update
           sudo apt-get install -y unzip wget
@@ -191,11 +226,20 @@ jobs:
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
           mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
 
-          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            echo "sdkmanager not found at $SDKMANAGER"
+            exit 1
+          fi
 
-          # Accept licenses and install platform
-          yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
-          sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platforms;android-37"
+          # refresh repository metadata
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --update
+
+          # Accept licenses non-interactively (creates $ANDROID_SDK_ROOT/licenses)
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses
+
+          # Install platform-tools, build-tools, and the platform
+          "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "build-tools;37.0.0" "platforms;android-37"
 
       - name: Run tests
         run: ./gradlew --no-daemon test
