@@ -41,13 +41,12 @@ jobs:
           sudo apt-get install -y unzip wget
 
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
-          cd "$ANDROID_SDK_ROOT"
+          rm -rf "$ANDROID_SDK_ROOT/cmdline-tools/latest" "$RUNNER_TEMP/android-cmdline-tools"
 
           # download command-line tools (update URL if Google changes it)
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools.zip
-          unzip -q commandlinetools.zip
-          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-          mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O "$RUNNER_TEMP/commandlinetools.zip"
+          unzip -q "$RUNNER_TEMP/commandlinetools.zip" -d "$RUNNER_TEMP/android-cmdline-tools"
+          mv "$RUNNER_TEMP/android-cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
 
           SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
           if [ ! -x "$SDKMANAGER" ]; then
@@ -100,13 +99,12 @@ jobs:
           sudo apt-get install -y unzip wget
 
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
-          cd "$ANDROID_SDK_ROOT"
+          rm -rf "$ANDROID_SDK_ROOT/cmdline-tools/latest" "$RUNNER_TEMP/android-cmdline-tools"
 
           # download command-line tools (update URL if Google changes it)
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools.zip
-          unzip -q commandlinetools.zip
-          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-          mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O "$RUNNER_TEMP/commandlinetools.zip"
+          unzip -q "$RUNNER_TEMP/commandlinetools.zip" -d "$RUNNER_TEMP/android-cmdline-tools"
+          mv "$RUNNER_TEMP/android-cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
 
           SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
           if [ ! -x "$SDKMANAGER" ]; then
@@ -159,13 +157,12 @@ jobs:
           sudo apt-get install -y unzip wget
 
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
-          cd "$ANDROID_SDK_ROOT"
+          rm -rf "$ANDROID_SDK_ROOT/cmdline-tools/latest" "$RUNNER_TEMP/android-cmdline-tools"
 
           # download command-line tools (update URL if Google changes it)
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools.zip
-          unzip -q commandlinetools.zip
-          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-          mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O "$RUNNER_TEMP/commandlinetools.zip"
+          unzip -q "$RUNNER_TEMP/commandlinetools.zip" -d "$RUNNER_TEMP/android-cmdline-tools"
+          mv "$RUNNER_TEMP/android-cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
 
           SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
           if [ ! -x "$SDKMANAGER" ]; then
@@ -218,13 +215,12 @@ jobs:
           sudo apt-get install -y unzip wget
 
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
-          cd "$ANDROID_SDK_ROOT"
+          rm -rf "$ANDROID_SDK_ROOT/cmdline-tools/latest" "$RUNNER_TEMP/android-cmdline-tools"
 
           # download command-line tools (update URL if Google changes it)
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools.zip
-          unzip -q commandlinetools.zip
-          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
-          mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O "$RUNNER_TEMP/commandlinetools.zip"
+          unzip -q "$RUNNER_TEMP/commandlinetools.zip" -d "$RUNNER_TEMP/android-cmdline-tools"
+          mv "$RUNNER_TEMP/android-cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
 
           SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
           if [ ! -x "$SDKMANAGER" ]; then
