@@ -14,9 +14,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class PersistanceTestTableDaoTest {
+class PersistenceTestTableDaoTest {
     private lateinit var database: ClientDueDateDatabase
-    private lateinit var persistanceTestTableDao: PersistanceTestTableDao
+    private lateinit var persistenceTestTableDao: PersistenceTestTableDao
 
     @Before
     fun createDatabase() {
@@ -27,7 +27,7 @@ class PersistanceTestTableDaoTest {
                     context,
                     ClientDueDateDatabase::class.java,
                 ).build()
-        persistanceTestTableDao = database.persistenceTestTableDao()
+        persistenceTestTableDao = database.persistenceTestTableDao()
     }
 
     @After
@@ -39,38 +39,38 @@ class PersistanceTestTableDaoTest {
     fun upsertStoresAndReadsTestTable() =
         runBlocking {
             val testTable =
-                PersistanceTestTableEntity(
+                PersistenceTestTableEntity(
                     label = "startup-test-table",
-                    message = "Room persisted this persistance test table row.",
+                    message = "Room persisted this persistence test table row.",
                     createdAtEpochMillis = 1_000,
                 )
 
-            persistanceTestTableDao.upsert(testTable)
+            persistenceTestTableDao.upsert(testTable)
 
-            val storedTestTable = persistanceTestTableDao.findByLabel("startup-test-table")
-            assertEquals("Room persisted this persistance test table row.", storedTestTable?.message)
+            val storedTestTable = persistenceTestTableDao.findByLabel("startup-test-table")
+            assertEquals("Room persisted this persistence test table row.", storedTestTable?.message)
         }
 
     @Test
     fun upsertReplacesTestTableWithSameLabel() =
         runBlocking {
-            persistanceTestTableDao.upsert(
-                PersistanceTestTableEntity(
+            persistenceTestTableDao.upsert(
+                PersistenceTestTableEntity(
                     label = "startup-test-table",
                     message = "First test table.",
                     createdAtEpochMillis = 1_000,
                 ),
             )
 
-            persistanceTestTableDao.upsert(
-                PersistanceTestTableEntity(
+            persistenceTestTableDao.upsert(
+                PersistenceTestTableEntity(
                     label = "startup-test-table",
                     message = "Updated test table.",
                     createdAtEpochMillis = 2_000,
                 ),
             )
 
-            val storedTestTables = persistanceTestTableDao.observeAll().first()
+            val storedTestTables = persistenceTestTableDao.observeAll().first()
             assertEquals(1, storedTestTables.size)
             assertEquals("Updated test table.", storedTestTables.single().message)
         }
@@ -78,7 +78,7 @@ class PersistanceTestTableDaoTest {
     @Test
     fun findByLabelReturnsNullWhenTestTableDoesNotExist() =
         runBlocking {
-            val storedTestTable = persistanceTestTableDao.findByLabel("missing-test-table")
+            val storedTestTable = persistenceTestTableDao.findByLabel("missing-test-table")
 
             assertNull(storedTestTable)
         }

@@ -14,4 +14,4 @@ Repository classes that coordinate persistence access live in `data/repository`,
 database access out of composable UI functions.
 
 The first Room schema is `client_due_date_tracker.db` version 1. It contains only the temporary
-`persistance_test_table` table used to prove Room persistence before the real app model is designed.
+`persistence_test_table` table used to prove Room persistence before the real app model is designed.
