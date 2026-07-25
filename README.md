@@ -71,6 +71,7 @@ See [`docs/architecture.md`](docs/architecture.md) for details.
 ## 📚 Developer Docs
 
 - [`docs/architecture.md`](docs/architecture.md) - package ownership and high-level structure
+- [`docs/screen-conventions.md`](docs/screen-conventions.md) - reusable screen, state, and ViewModel pattern
 - [`docs/dependencies/DependencyGuide.md`](docs/dependencies/DependencyGuide.md) - core dependency roles
 - [`docs/developer-reference.md`](docs/developer-reference.md) - curated official docs links
 
