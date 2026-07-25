@@ -32,7 +32,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: "platform-tools build-tools;37.0.0 platforms;android-37"
+          packages: "platform-tools build-tools;37.0.0 platforms;android-37.0"
           log-accepted-android-sdk-licenses: false
 
       - name: Build project
@@ -62,7 +62,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: "platform-tools build-tools;37.0.0 platforms;android-37"
+          packages: "platform-tools build-tools;37.0.0 platforms;android-37.0"
           log-accepted-android-sdk-licenses: false
 
       - name: Check formatting
@@ -92,7 +92,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: "platform-tools build-tools;37.0.0 platforms;android-37"
+          packages: "platform-tools build-tools;37.0.0 platforms;android-37.0"
           log-accepted-android-sdk-licenses: false
 
       - name: Run lint
@@ -122,7 +122,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: "platform-tools build-tools;37.0.0 platforms;android-37"
+          packages: "platform-tools build-tools;37.0.0 platforms;android-37.0"
           log-accepted-android-sdk-licenses: false
 
       - name: Run tests
