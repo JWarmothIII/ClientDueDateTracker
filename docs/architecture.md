@@ -9,6 +9,25 @@ platform/   Android platform integrations
 shared/     Reusable UI, navigation, utilities, and theme
 ```
 
+## UI layer
+
+Each screen-level destination follows unidirectional data flow:
+
+```text
+repository or use case -> ViewModel -> UiState -> screen content
+                              ^                    |
+                              +---- callbacks -----+
+```
+
+Feature UI lives under `domain/<feature>/ui`. A screen ViewModel prepares immutable UI state and
+handles business actions. The public screen composable connects that state and those actions to a
+stateless content composable. Navigation and other UI behavior remain in the UI layer.
+
+See [Screen Conventions](screen-conventions.md) for file naming, responsibility boundaries,
+event handling, previews, testing guidance, and a reusable screen template.
+
+## Data layer
+
 Room database definitions, entities, DAOs, and database modules live in `data/database`.
 Repository classes that coordinate persistence access live in `data/repository`, keeping direct
 database access out of composable UI functions.

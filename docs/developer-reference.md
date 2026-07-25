@@ -17,8 +17,19 @@ project's core Android stack.
 ## ViewModel and State
 
 - ViewModel overview: https://developer.android.com/topic/libraries/architecture/viewmodel
+- UI layer: https://developer.android.com/topic/architecture/ui-layer
+- State holders and UI state: https://developer.android.com/topic/architecture/ui-layer/stateholders
+- UI events: https://developer.android.com/topic/architecture/ui-layer/events
+- Android architecture recommendations: https://developer.android.com/topic/architecture/recommendations
 - State and Jetpack Compose: https://developer.android.com/develop/ui/compose/state
 - Lifecycle-aware state collection: https://developer.android.com/develop/ui/compose/state#other-supported-types
+
+## Reference Apps
+
+- Now in Android architecture:
+  https://github.com/android/nowinandroid/blob/main/docs/ArchitectureLearningJourney.md
+- Android architecture samples: https://github.com/android/architecture-samples
+- Official Jetpack Compose samples: https://github.com/android/compose-samples
 
 ## Persistence
 
@@ -45,5 +56,6 @@ project's core Android stack.
 ## Project Docs
 
 - Architecture summary: `docs/architecture.md`
+- Screen conventions and template: `docs/screen-conventions.md`
 - Dependency guide: `docs/dependencies/DependencyGuide.md`
 - Daily commands: `README.md`
