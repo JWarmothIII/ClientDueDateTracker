@@ -6,8 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import dagger.hilt.android.AndroidEntryPoint
-import dev.jwarmothiii.clientduedatetracker.shared.navigation.ClientDueDateTrackerNavigation
-import dev.jwarmothiii.clientduedatetracker.shared.theme.ClientDueDateTrackerTheme
+import dev.jwarmothiii.clientduedatetracker.app.navigation.ClientDueDateTrackerNavigation
+import dev.jwarmothiii.clientduedatetracker.designsystem.theme.ClientDueDateTrackerTheme
+import dev.jwarmothiii.clientduedatetracker.platform.notification.NotificationPermissionHost
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             ClientDueDateTrackerTheme {
                 Surface {
-                    ClientDueDateTrackerNavigation()
+                    NotificationPermissionHost { notificationsDenied, openSettings ->
+                        ClientDueDateTrackerNavigation(
+                            notificationsDenied = notificationsDenied,
+                            onOpenNotificationSettings = openSettings,
+                        )
+                    }
                 }
             }
         }
