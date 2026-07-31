@@ -1,170 +1,76 @@
-# 📅 Client Due Date Tracker
+# Client Due Date Tracker
 
-A local-first Android app for tracking contract-driven paperwork deadlines for counseling programs.
+A local-first Android app for tracking contract-driven counseling paperwork deadlines.
 
----
+## V1 capabilities
 
-## 🎯 Purpose
+- Atomic client onboarding with one contract and generated initial requirements
+- Configurable, versioned CTS, USPO, and State / RSUD requirement definitions
+- Rolling 30-day deadline generation for intake, assessment, event, exit, weekly, monthly, and
+  90-day policies
+- Dashboard sections for overdue, due-soon, recently completed, and pinned-note context
+- Quick requirement completion and reopening
+- Client-owned notes with optional requirement links and multiple pins
+- One generic daily notification summary with no client-specific lock-screen content
+- Fully local application data with Android backup and device transfer enabled
 
-This app is designed to help track required documentation and due dates for clients in structured programs.
+The dashboard is the start destination. Use **Add client** to enter initials, intake and assessment
+dates, an optional completed-assessment or planned-exit date, and an active contract type. Dates use
+`YYYY-MM-DD`.
 
-It focuses on:
+## Technology
 
-- Tracking paperwork requirements per client
-- Calculating due dates automatically
-- Surfacing upcoming and overdue work
-- Providing quick operational context through notes
+- Kotlin and Jetpack Compose with Material 3
+- Room with an exported canonical version-1 schema
+- Hilt for dependency injection
+- WorkManager for local daily maintenance
+- Navigation Compose
+- Spotless/ktlint and Android lint
 
----
+## Architecture
 
-## 🧠 Core Concepts
+The single `app` Gradle module is organized around four write-owning domains:
+`client`, `contractdefinition`, `contracttracking`, and `notes`. `dashboard` and `notification`
+consume their public APIs.
 
-- **Client** -> a person in the program
-- **Contract** -> defines the program type and rules (one per client)
-- **Requirement** -> a piece of required paperwork with a due date
-- **Requirement Template** -> defines requirements per contract type
-- **Notes** -> lightweight operational context (pinnable)
+Business models are framework-free, IDs are typed UUID strings, and Room numeric keys never cross
+owner APIs. There are no generic `shared` or `core` packages.
 
----
+- [Architecture](docs/architecture.md)
+- [V1 ERD](docs/erd.md)
+- [Screen conventions](docs/screen-conventions.md)
+- [Decision journal](docs/decision-journal.md)
+- [Dependency guide](docs/dependencies/DependencyGuide.md)
+- [Developer reference](docs/developer-reference.md)
 
-## 📊 Key Features
-
-- 📅 Automatic deadline calculation
-- ⚠️ Dashboard for due soon items, overdue items, and pinned notes
-- 📝 Notes system with pinning
-- 🔔 Local notifications (due soon and overdue)
-- 📱 Fully local (no external API)
-
----
-
-## 🏗️ Tech Stack
-
-- **Kotlin**
-- **Jetpack Compose**
-- **Material 3 (Compose)**
-- **AndroidX Activity Compose**
-- **AndroidX Lifecycle Runtime KTX**
-- **Navigation Compose**
-- **Room**
-- **WorkManager**
-- **Hilt**
-- **Spotless / ktlint**
-- **Android Lint**
-
----
-
-## 🧱 Architecture
-
-Domain-oriented Android architecture:
-
-```text
-domain/     Business-focused areas and their UI, state, and models
-data/       Persistence and repository implementations
-platform/   Android platform integrations
-shared/     Reusable UI, navigation, utilities, and theme
-```
-
-See [`docs/architecture.md`](docs/architecture.md) for details.
-
----
-
-## 📚 Developer Docs
-
-- [`docs/architecture.md`](docs/architecture.md) - package ownership and high-level structure
-- [`docs/screen-conventions.md`](docs/screen-conventions.md) - reusable screen, state, and ViewModel pattern
-- [`docs/dependencies/DependencyGuide.md`](docs/dependencies/DependencyGuide.md) - core dependency roles
-- [`docs/developer-reference.md`](docs/developer-reference.md) - curated official docs links
-
----
-
-## 🔁 Git and PR Workflow
-
-- Start from `main`.
-- Create a short-lived branch for one issue or story.
-- Run local validation before opening a PR.
-- Open a PR into `main` and link the issue or epic.
-- Use squash merge after review and passing CI.
-- Delete the branch after merge.
-
-Use the PR template in `.github/pull_request_template.md` for summary, screenshots, test notes,
-and linked issue context.
-
----
-
-## ▶️ Run on Emulator
-
-From the project root:
+## Run on an emulator
 
 ```powershell
 .\tools\start-app.ps1
 ```
 
-Optional parameters:
+Use `-AvdName` to choose a profile, `-SkipBuild` to reuse an APK, or `-External`/`-e` to launch a
+standalone emulator. The script refuses to guess when multiple emulators are connected.
+
+Existing development installs using the old persistence-proof schema must be cleared or
+reinstalled before running this version.
+
+## Local verification
 
 ```powershell
-# Pick a specific AVD name
-.\tools\start-app.ps1 -AvdName "Pixel_8_API_36"
-
-# Skip build (faster if APK is already built)
-.\tools\start-app.ps1 -SkipBuild
-
-# Launch a standalone emulator window when none are running
-.\tools\start-app.ps1 -External
-.\tools\start-app.ps1 -e
-```
-
-Safety behavior:
-- If zero emulators are running, it expects you to start the IDE-integrated emulator first.
-- If exactly one emulator is running, it reuses it.
-- If more than one emulator is running, it stops with an error so you do not accidentally proceed with multiple emulators.
-- Use `-External` (or `-e` / `--e`) if you want the script to launch an external emulator window.
-- If `-AvdName` is not provided, it defaults to `Pixel 4 XL` (or falls back to the first available AVD if that profile does not exist).
-- Note: launching an IDE-embedded emulator directly is controlled by the IDE, so the script reuses it once it is running.
-
-SDK discovery for `adb`/`emulator`:
-- `PATH`
-- `ANDROID_SDK_ROOT`
-- `ANDROID_HOME`
-- `local.properties` (`sdk.dir`)
-- `%LOCALAPPDATA%\Android\Sdk`
-
----
-
-## 🛠️ Project Tools
-
-Run these scripts from the project root:
-
-```powershell
-.\tools\build.ps1
-.\tools\clean-build.ps1
 .\tools\format.ps1
-.\tools\lint.ps1
 .\tools\test.ps1
-.\tools\start-app.ps1
+.\tools\lint.ps1
+.\tools\build.ps1
 ```
 
-Command purpose:
+- JVM business and architecture tests live under `app/src/test`.
+- Room and Compose instrumentation tests live under `app/src/androidTest`.
+- The full build checks formatting, unit tests, lint, APK assembly, and instrumentation-test
+  compilation. Running instrumentation tests still requires an emulator or device.
 
-- `.\tools\build.ps1` runs the full Gradle build, including lint, formatting checks, and tests.
-- `.\tools\clean-build.ps1` cleans and rebuilds from scratch.
-- `.\tools\format.ps1` applies Kotlin formatting.
-- `.\tools\lint.ps1` runs Android lint static analysis and writes reports under `app/build/reports/`.
-- `.\tools\test.ps1` runs local JVM tests.
-- `.\tools\start-app.ps1` builds and installs the debug app on an emulator or connected device.
+## Git workflow
 
-Test naming:
-
-- Local JVM tests live under `app/src/test`.
-- Android-dependent tests live under `app/src/androidTest`.
-- Name test classes after the subject under test, such as `RequirementStatusTest` or
-  `PersistenceTestTableDaoTest`.
-
-Configure the repo's local Git hooks once per checkout:
-
-```powershell
-.\tools\setup-git-hooks.ps1
-```
-
-The commit-message hook appends a pull request link when you commit from the CLI. If the GitHub
-CLI can find an existing PR for the current branch, it appends that PR URL. Otherwise, it appends
-a GitHub compare URL that opens a new PR.
+Create a short-lived branch from `main`, keep one issue or story in scope, run local validation,
+and open a pull request using `.github/pull_request_template.md`. Do not claim remote CI passed
+until the branch-specific workflow has actually completed.

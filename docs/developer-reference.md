@@ -36,11 +36,15 @@ project's core Android stack.
 - Room overview: https://developer.android.com/training/data-storage/room
 - Room relationships: https://developer.android.com/training/data-storage/room/relationships
 - Room testing: https://developer.android.com/training/data-storage/room/testing-db
+- Project V1 ERD: `docs/erd.md`
 
 ## Background Work
 
 - WorkManager overview: https://developer.android.com/topic/libraries/architecture/workmanager
 - WorkManager testing: https://developer.android.com/topic/libraries/architecture/workmanager/how-to/integration-testing
+- Notification runtime permission: https://developer.android.com/develop/ui/views/notifications/notification-permission
+- Notification privacy and lock-screen visibility:
+  https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification
 
 ## Dependency Injection
 
@@ -59,3 +63,13 @@ project's core Android stack.
 - Screen conventions and template: `docs/screen-conventions.md`
 - Dependency guide: `docs/dependencies/DependencyGuide.md`
 - Daily commands: `README.md`
+- Durable product and architecture decisions: `docs/decision-journal.md`
+
+## Project-specific implementation notes
+
+- `ClientDueDateDatabase` version 1 is the canonical baseline; old development installs are not
+  migrated.
+- The worker is a unique self-scheduling one-time chain targeting 10:00 AM local time.
+- Android 13+ notification permission is requested only after the in-app explanation.
+- Business dates use `LocalDate`; audit and delivery moments use UTC `Instant`.
+- Generated Room schemas are committed from `app/schemas`.

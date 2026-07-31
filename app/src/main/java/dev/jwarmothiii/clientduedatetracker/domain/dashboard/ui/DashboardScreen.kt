@@ -2,27 +2,23 @@
 
 package dev.jwarmothiii.clientduedatetracker.domain.dashboard.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,312 +26,231 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.jwarmothiii.clientduedatetracker.data.database.PersistenceTestTableEntity
-import dev.jwarmothiii.clientduedatetracker.shared.theme.ClientDueDateTrackerTheme
+import dev.jwarmothiii.clientduedatetracker.domain.contracttracking.api.DashboardRequirement
+import dev.jwarmothiii.clientduedatetracker.domain.notes.api.DashboardNote
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun DashboardScreen(
+    onAddClient: () -> Unit,
+    onOpenNotificationSettings: () -> Unit,
+    notificationsDenied: Boolean,
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     DashboardContent(
-        uiState = uiState,
+        state = state,
+        onAddClient = onAddClient,
+        onOpenNotificationSettings = onOpenNotificationSettings,
+        notificationsDenied = notificationsDenied,
+        onComplete = viewModel::complete,
+        onReopen = viewModel::reopen,
+        onRetry = viewModel::refresh,
         modifier = modifier,
     )
 }
 
 @Composable
-private fun DashboardContent(
-    uiState: DashboardUiState,
+internal fun DashboardContent(
+    state: DashboardUiState,
+    onAddClient: () -> Unit,
+    onOpenNotificationSettings: () -> Unit,
+    notificationsDenied: Boolean,
+    onComplete: (dev.jwarmothiii.clientduedatetracker.domain.contracttracking.model.RequirementId) -> Unit,
+    onReopen: (dev.jwarmothiii.clientduedatetracker.domain.contracttracking.model.RequirementId) -> Unit,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            Surface(color = MaterialTheme.colorScheme.background) {
-                AddClientButton(
+            Surface {
+                Button(
+                    onClick = onAddClient,
                     modifier =
                         Modifier
+                            .fillMaxWidth()
                             .navigationBarsPadding()
                             .padding(horizontal = 24.dp, vertical = 12.dp),
-                )
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Text("Add client")
+                }
             }
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .statusBarsPadding(),
-            contentPadding =
-                PaddingValues(
-                    start = 24.dp,
-                    top = 20.dp,
-                    end = 24.dp,
-                    bottom = innerPadding.calculateBottomPadding() + 20.dp,
-                ),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-        ) {
-            item { Header() }
-            item { SummaryRow() }
-            item { DueSoonCard() }
-            item { PinnedNoteCard() }
-            item { PersistenceTestTableCard(persistenceTestTables = uiState.persistenceTestTables) }
-        }
-    }
-}
-
-@Composable
-private fun Header() {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(
-            text = "Good morning",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
-        Text(
-            text = "Here is what needs your attention.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun SummaryRow() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        SummaryCard(value = "3", label = "Due soon", modifier = Modifier.weight(1f))
-        SummaryCard(value = "12", label = "Active clients", modifier = Modifier.weight(1f))
-    }
-}
-
-@Composable
-private fun SummaryCard(
-    value: String,
-    label: String,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier,
-        colors =
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-            ),
-        shape = RoundedCornerShape(20.dp),
-    ) {
-        Column(
-            modifier = Modifier.padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-        }
-    }
-}
-
-@Composable
-private fun DueSoonCard() {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        SectionTitle(title = "Due soon")
-        Card(
-            colors =
-                CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            shape = RoundedCornerShape(20.dp),
-        ) {
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(18.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(
-                    modifier =
-                        Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary),
-                )
+        when (state) {
+            DashboardUiState.Loading -> {
                 Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(3.dp),
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                 ) {
-                    Text(
-                        text = "Treatment plan",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = "JS",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    shape = RoundedCornerShape(50),
-                ) {
-                    Text(
-                        text = "DUE TOMORROW",
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
+                    CircularProgressIndicator()
+                    Text("Loading dashboard", modifier = Modifier.padding(top = 12.dp))
                 }
             }
-        }
-    }
-}
 
-@Composable
-private fun PinnedNoteCard() {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        SectionTitle(title = "Pinned note")
-        Card(
-            colors =
-                CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                ),
-            shape = RoundedCornerShape(20.dp),
-        ) {
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(18.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-            ) {
-                Text(
-                    text = "Discharge for JS due before Friday.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                )
-                Text(
-                    text = "Updated today",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            is DashboardUiState.Error -> {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Text(state.message, color = MaterialTheme.colorScheme.error)
+                    Button(onClick = onRetry, modifier = Modifier.padding(top = 12.dp)) {
+                        Text("Retry")
+                    }
+                }
             }
-        }
-    }
-}
 
-@Composable
-private fun PersistenceTestTableCard(persistenceTestTables: List<PersistenceTestTableEntity>) {
-    val latestTestTable = persistenceTestTables.firstOrNull()
-    val statusText =
-        if (latestTestTable == null) {
-            "Waiting for persistence test table row."
-        } else {
-            latestTestTable.message
-        }
-    val countText = "Records: ${persistenceTestTables.size}"
-
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        SectionTitle(title = "Persistence test table")
-        Card(
-            colors =
-                CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            shape = RoundedCornerShape(20.dp),
-        ) {
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(18.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-            ) {
-                Text(
-                    text = statusText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Text(
-                    text = countText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SectionTitle(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.onBackground,
-    )
-}
-
-@Composable
-private fun AddClientButton(modifier: Modifier = Modifier) {
-    Button(
-        onClick = {},
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(54.dp),
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
-        shape = RoundedCornerShape(16.dp),
-    ) {
-        Text(
-            text = "Add client",
-            style = MaterialTheme.typography.labelLarge,
-            textAlign = TextAlign.Center,
-        )
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun DashboardScreenPreview() {
-    ClientDueDateTrackerTheme {
-        DashboardContent(
-            uiState =
-                DashboardUiState(
-                    persistenceTestTables =
-                        listOf(
-                            PersistenceTestTableEntity(
-                                label = "startup-test-table",
-                                message = "Room persisted this persistence test table row.",
-                                createdAtEpochMillis = 0,
-                            ),
+            is DashboardUiState.Data -> {
+                DashboardData(
+                    state = state,
+                    notificationsDenied = notificationsDenied,
+                    onOpenNotificationSettings = onOpenNotificationSettings,
+                    onComplete = onComplete,
+                    onReopen = onReopen,
+                    contentPadding =
+                        PaddingValues(
+                            start = 24.dp,
+                            top = 24.dp,
+                            end = 24.dp,
+                            bottom = innerPadding.calculateBottomPadding() + 20.dp,
                         ),
-                ),
-        )
+                )
+            }
+        }
     }
 }
+
+@Composable
+private fun DashboardData(
+    state: DashboardUiState.Data,
+    notificationsDenied: Boolean,
+    onOpenNotificationSettings: () -> Unit,
+    onComplete: (dev.jwarmothiii.clientduedatetracker.domain.contracttracking.model.RequirementId) -> Unit,
+    onReopen: (dev.jwarmothiii.clientduedatetracker.domain.contracttracking.model.RequirementId) -> Unit,
+    contentPadding: PaddingValues,
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item {
+            Column {
+                Text("Dashboard", style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    "${state.activeClientCount} active clients",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        if (notificationsDenied) {
+            item {
+                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                    Column(Modifier.padding(16.dp)) {
+                        Text("Notifications are off", style = MaterialTheme.typography.titleMedium)
+                        Text("Turn them on in Android settings to receive daily reminder summaries.")
+                        OutlinedButton(onClick = onOpenNotificationSettings) {
+                            Text("Open settings")
+                        }
+                    }
+                }
+            }
+        }
+        requirementSection("Overdue", state.overdue, "No overdue requirements.", onComplete)
+        requirementSection("Due in the next 7 days", state.dueSoon, "Nothing due soon.", onComplete)
+        item { Text("Recently completed", style = MaterialTheme.typography.titleLarge) }
+        val recent = state.recentlyCompleted.take(5)
+        if (recent.isEmpty()) {
+            item { EmptyCard("No recently completed requirements.") }
+        } else {
+            items(recent, key = { it.requirement.id.value }) { row ->
+                RequirementCard(row = row, actionLabel = "Reopen", onAction = { onReopen(row.requirement.id) })
+            }
+        }
+        item { Text("Pinned notes", style = MaterialTheme.typography.titleLarge) }
+        val pinned = state.pinnedNotes.take(3)
+        if (pinned.isEmpty()) {
+            item { EmptyCard("No pinned notes.") }
+        } else {
+            items(pinned, key = { it.note.id.value }) { PinnedNoteCard(it) }
+        }
+    }
+}
+
+private fun androidx.compose.foundation.lazy.LazyListScope.requirementSection(
+    title: String,
+    rows: List<DashboardRequirement>,
+    emptyText: String,
+    onComplete: (dev.jwarmothiii.clientduedatetracker.domain.contracttracking.model.RequirementId) -> Unit,
+) {
+    item { Text(title, style = MaterialTheme.typography.titleLarge) }
+    if (rows.isEmpty()) {
+        item { EmptyCard(emptyText) }
+    } else {
+        items(rows, key = { it.requirement.id.value }) { row ->
+            RequirementCard(row = row, actionLabel = "Complete", onAction = { onComplete(row.requirement.id) })
+        }
+    }
+}
+
+@Composable
+private fun RequirementCard(
+    row: DashboardRequirement,
+    actionLabel: String,
+    onAction: () -> Unit,
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(row.requirement.title, style = MaterialTheme.typography.titleMedium)
+                Text(
+                    "${row.clientInitials} · ${row.requirement.dueDate.format(DATE_FORMAT)}",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            OutlinedButton(onClick = onAction) { Text(actionLabel) }
+        }
+    }
+}
+
+@Composable
+private fun PinnedNoteCard(row: DashboardNote) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text(row.note.content, maxLines = 4, overflow = TextOverflow.Ellipsis)
+            Text(
+                row.clientInitials,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                style = MaterialTheme.typography.labelMedium,
+            )
+        }
+    }
+}
+
+@Composable
+private fun EmptyCard(text: String) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Text(text, modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+private val DATE_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, uuuu")
