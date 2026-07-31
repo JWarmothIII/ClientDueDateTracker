@@ -1,0 +1,982 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "34e161467557e211ed89317b30370805",
+    "entities": [
+      {
+        "tableName": "clients",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `initials` TEXT NOT NULL, `intake_date` INTEGER NOT NULL, `scheduled_assessment_date` INTEGER NOT NULL, `actual_assessment_completed_date` INTEGER, `planned_exit_date` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "initials",
+            "columnName": "initials",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intakeDate",
+            "columnName": "intake_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scheduledAssessmentDate",
+            "columnName": "scheduled_assessment_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actualAssessmentCompletedDate",
+            "columnName": "actual_assessment_completed_date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "plannedExitDate",
+            "columnName": "planned_exit_date",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_clients_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_clients_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          }
+        ]
+      },
+      {
+        "tableName": "contract_types",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `lineage_id` TEXT NOT NULL, `version` INTEGER NOT NULL, `name` TEXT NOT NULL, `active` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineageId",
+            "columnName": "lineage_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_contract_types_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_contract_types_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          },
+          {
+            "name": "index_contract_types_lineage_id_version",
+            "unique": true,
+            "columnNames": [
+              "lineage_id",
+              "version"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_contract_types_lineage_id_version` ON `${TABLE_NAME}` (`lineage_id`, `version`)"
+          },
+          {
+            "name": "index_contract_types_active",
+            "unique": false,
+            "columnNames": [
+              "active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_contract_types_active` ON `${TABLE_NAME}` (`active`)"
+          }
+        ]
+      },
+      {
+        "tableName": "requirement_templates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `contract_type_id` INTEGER NOT NULL, `lineage_id` TEXT NOT NULL, `version` INTEGER NOT NULL, `title` TEXT NOT NULL, `instructions` TEXT NOT NULL, `deadline_policy_json` TEXT NOT NULL, `notification_lead_days` INTEGER NOT NULL, `active` INTEGER NOT NULL, FOREIGN KEY(`contract_type_id`) REFERENCES `contract_types`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contractTypeId",
+            "columnName": "contract_type_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineageId",
+            "columnName": "lineage_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "instructions",
+            "columnName": "instructions",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deadlinePolicyJson",
+            "columnName": "deadline_policy_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationLeadDays",
+            "columnName": "notification_lead_days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_requirement_templates_contract_type_id",
+            "unique": false,
+            "columnNames": [
+              "contract_type_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_requirement_templates_contract_type_id` ON `${TABLE_NAME}` (`contract_type_id`)"
+          },
+          {
+            "name": "index_requirement_templates_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_requirement_templates_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          },
+          {
+            "name": "index_requirement_templates_lineage_id_version",
+            "unique": true,
+            "columnNames": [
+              "lineage_id",
+              "version"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_requirement_templates_lineage_id_version` ON `${TABLE_NAME}` (`lineage_id`, `version`)"
+          },
+          {
+            "name": "index_requirement_templates_active",
+            "unique": false,
+            "columnNames": [
+              "active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_requirement_templates_active` ON `${TABLE_NAME}` (`active`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "contract_types",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_type_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "contracts",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `client_id` INTEGER NOT NULL, `contract_type_id` INTEGER NOT NULL, `start_date` INTEGER NOT NULL, `active` INTEGER NOT NULL, `planned_exit_date` INTEGER, `actual_exit_date` INTEGER, `exit_kind` TEXT, FOREIGN KEY(`client_id`) REFERENCES `clients`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`contract_type_id`) REFERENCES `contract_types`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clientId",
+            "columnName": "client_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contractTypeId",
+            "columnName": "contract_type_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "start_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plannedExitDate",
+            "columnName": "planned_exit_date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "actualExitDate",
+            "columnName": "actual_exit_date",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "exitKind",
+            "columnName": "exit_kind",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_contracts_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_contracts_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          },
+          {
+            "name": "index_contracts_client_id",
+            "unique": true,
+            "columnNames": [
+              "client_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_contracts_client_id` ON `${TABLE_NAME}` (`client_id`)"
+          },
+          {
+            "name": "index_contracts_contract_type_id",
+            "unique": false,
+            "columnNames": [
+              "contract_type_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_contracts_contract_type_id` ON `${TABLE_NAME}` (`contract_type_id`)"
+          },
+          {
+            "name": "index_contracts_active",
+            "unique": false,
+            "columnNames": [
+              "active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_contracts_active` ON `${TABLE_NAME}` (`active`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "clients",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "client_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "contract_types",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_type_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "contract_definition_assignments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `template_id` INTEGER NOT NULL, PRIMARY KEY(`contract_id`, `template_id`), FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`template_id`) REFERENCES `requirement_templates`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "contractId",
+            "columnName": "contract_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "templateId",
+            "columnName": "template_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "contract_id",
+            "template_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_contract_definition_assignments_template_id",
+            "unique": false,
+            "columnNames": [
+              "template_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_contract_definition_assignments_template_id` ON `${TABLE_NAME}` (`template_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "contracts",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "requirement_templates",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "template_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "contract_events",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `contract_id` INTEGER NOT NULL, `kind` TEXT NOT NULL, `event_date` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contractId",
+            "columnName": "contract_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventDate",
+            "columnName": "event_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_contract_events_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_contract_events_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          },
+          {
+            "name": "index_contract_events_contract_id",
+            "unique": false,
+            "columnNames": [
+              "contract_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_contract_events_contract_id` ON `${TABLE_NAME}` (`contract_id`)"
+          },
+          {
+            "name": "index_contract_events_contract_id_kind_event_date",
+            "unique": false,
+            "columnNames": [
+              "contract_id",
+              "kind",
+              "event_date"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_contract_events_contract_id_kind_event_date` ON `${TABLE_NAME}` (`contract_id`, `kind`, `event_date`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "contracts",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "requirements",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `contract_id` INTEGER NOT NULL, `template_id` INTEGER, `origin` TEXT NOT NULL, `occurrence_key` TEXT, `title` TEXT NOT NULL, `instructions` TEXT NOT NULL, `due_date` INTEGER NOT NULL, `notification_lead_days` INTEGER NOT NULL, `status` TEXT NOT NULL, `completed_at` INTEGER, `manually_customized` INTEGER NOT NULL, FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`template_id`) REFERENCES `requirement_templates`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contractId",
+            "columnName": "contract_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "templateId",
+            "columnName": "template_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "occurrenceKey",
+            "columnName": "occurrence_key",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "instructions",
+            "columnName": "instructions",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueDate",
+            "columnName": "due_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationLeadDays",
+            "columnName": "notification_lead_days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completed_at",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "manuallyCustomized",
+            "columnName": "manually_customized",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_requirements_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_requirements_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          },
+          {
+            "name": "index_requirements_contract_id",
+            "unique": false,
+            "columnNames": [
+              "contract_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_requirements_contract_id` ON `${TABLE_NAME}` (`contract_id`)"
+          },
+          {
+            "name": "index_requirements_template_id",
+            "unique": false,
+            "columnNames": [
+              "template_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_requirements_template_id` ON `${TABLE_NAME}` (`template_id`)"
+          },
+          {
+            "name": "index_requirements_occurrence_key",
+            "unique": true,
+            "columnNames": [
+              "occurrence_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_requirements_occurrence_key` ON `${TABLE_NAME}` (`occurrence_key`)"
+          },
+          {
+            "name": "index_requirements_status_due_date",
+            "unique": false,
+            "columnNames": [
+              "status",
+              "due_date"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_requirements_status_due_date` ON `${TABLE_NAME}` (`status`, `due_date`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "contracts",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "requirement_templates",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "template_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "requirement_suppressions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `contract_id` INTEGER NOT NULL, `occurrence_key` TEXT NOT NULL, `created_at` INTEGER NOT NULL, FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contractId",
+            "columnName": "contract_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "occurrenceKey",
+            "columnName": "occurrence_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_requirement_suppressions_contract_id",
+            "unique": false,
+            "columnNames": [
+              "contract_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_requirement_suppressions_contract_id` ON `${TABLE_NAME}` (`contract_id`)"
+          },
+          {
+            "name": "index_requirement_suppressions_occurrence_key",
+            "unique": true,
+            "columnNames": [
+              "occurrence_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_requirement_suppressions_occurrence_key` ON `${TABLE_NAME}` (`occurrence_key`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "contracts",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "notes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `public_id` TEXT NOT NULL, `client_id` INTEGER NOT NULL, `requirement_id` INTEGER, `content` TEXT NOT NULL, `pinned` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, FOREIGN KEY(`client_id`) REFERENCES `clients`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`requirement_id`) REFERENCES `requirements`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicId",
+            "columnName": "public_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clientId",
+            "columnName": "client_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requirementId",
+            "columnName": "requirement_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinned",
+            "columnName": "pinned",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_notes_public_id",
+            "unique": true,
+            "columnNames": [
+              "public_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_notes_public_id` ON `${TABLE_NAME}` (`public_id`)"
+          },
+          {
+            "name": "index_notes_client_id",
+            "unique": false,
+            "columnNames": [
+              "client_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_notes_client_id` ON `${TABLE_NAME}` (`client_id`)"
+          },
+          {
+            "name": "index_notes_requirement_id",
+            "unique": false,
+            "columnNames": [
+              "requirement_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_notes_requirement_id` ON `${TABLE_NAME}` (`requirement_id`)"
+          },
+          {
+            "name": "index_notes_pinned_updated_at",
+            "unique": false,
+            "columnNames": [
+              "pinned",
+              "updated_at"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_notes_pinned_updated_at` ON `${TABLE_NAME}` (`pinned`, `updated_at`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "clients",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "client_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "requirements",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "requirement_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "notification_deliveries",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `requirement_id` INTEGER NOT NULL, `delivery_kind` TEXT NOT NULL, `delivery_date` INTEGER NOT NULL, `delivered_at` INTEGER NOT NULL, FOREIGN KEY(`requirement_id`) REFERENCES `requirements`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requirementId",
+            "columnName": "requirement_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deliveryKind",
+            "columnName": "delivery_kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deliveryDate",
+            "columnName": "delivery_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deliveredAt",
+            "columnName": "delivered_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_notification_deliveries_requirement_id",
+            "unique": false,
+            "columnNames": [
+              "requirement_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_notification_deliveries_requirement_id` ON `${TABLE_NAME}` (`requirement_id`)"
+          },
+          {
+            "name": "index_notification_deliveries_requirement_id_delivery_kind_delivery_date",
+            "unique": true,
+            "columnNames": [
+              "requirement_id",
+              "delivery_kind",
+              "delivery_date"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_notification_deliveries_requirement_id_delivery_kind_delivery_date` ON `${TABLE_NAME}` (`requirement_id`, `delivery_kind`, `delivery_date`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "requirements",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "requirement_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '34e161467557e211ed89317b30370805')"
+    ]
+  }
+}
